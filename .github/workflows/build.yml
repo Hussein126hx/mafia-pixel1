@@ -9,7 +9,18 @@ jobs:
       - uses: actions/checkout@v4
       - name: Unpack project
         run: |
-          if [ -f project.zip ]; then unzip -o project.zip; fi
+          echo "Files in repo root:"
+          ls -la
+          ZIP=$(find . -maxdepth 2 -iname "*.zip" | head -n 1)
+          echo "Found zip: $ZIP"
+          if [ -n "$ZIP" ]; then
+            unzip -o "$ZIP" -d .
+          else
+            echo "No zip file found!"
+            exit 1
+          fi
+          echo "After unzip:"
+          ls -la
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
